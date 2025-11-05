@@ -1,51 +1,39 @@
-import React, {useState, useEffect, useRef} from 'react'
-import Taskbar from './Taskbar.jsx'
+import React, {useState, useRef, useEffect} from 'react'
+import Dock from './Dock.jsx'
 import Window from './Window.jsx'
 import BrowserApp from '../apps/BrowserApp.jsx'
-import SettingsApp from '../apps/SettingsApp.jsx'
 import FilesApp from '../apps/FilesApp.jsx'
 import TerminalApp from '../apps/TerminalApp.jsx'
-import MusicApp from '../apps/MusicApp.jsx'
+import SettingsApp from '../components/SettingsApp.jsx'
 
 export default function Desktop(){
   const [open, setOpen] = useState([])
   const [zmap, setZmap] = useState({})
-  const zCounter = useRef(1)
-  const [settings, setSettings] = useState({theme:'aether', wallpaper:'/wallpaper.svg'})
+  const z = useRef(1)
 
   useEffect(()=>{
-    try{
-      const s = JSON.parse(localStorage.getItem('aetheros.settings') || '{}')
-      setSettings(s.theme ? s : settings)
-    }catch(e){}
+    const s = JSON.parse(localStorage.getItem('aetheros.open')||'[]')
+    if(Array.isArray(s)) setOpen(s)
   },[])
+  useEffect(()=>{ localStorage.setItem('aetheros.open', JSON.stringify(open)) },[open])
 
-  useEffect(()=>{
-    localStorage.setItem('aetheros.settings', JSON.stringify(settings))
-  },[settings])
-
-  const openApp = (id)=> {
-    setOpen(s=> s.includes(id) ? s : [...s,id])
+  const openApp = (id)=>{
+    if(!open.includes(id)) setOpen(prev=> [...prev,id])
     bringToFront(id)
   }
-  const closeApp = (id)=> setOpen(s=> s.filter(x=> x!==id))
-  const bringToFront = (id)=> {
-    zCounter.current += 1
-    setZmap(m=> ({...m, [id]: zCounter.current}))
-  }
-
-  const setTheme = (t)=> setSettings(s=> ({...s, theme: t}))
-  const setWallpaper = (w)=> setSettings(s=> ({...s, wallpaper: w}))
+  const closeApp = (id)=> setOpen(prev=> prev.filter(x=> x!==id))
+  const bringToFront = (id)=>{ z.current += 1; setZmap(m => ({...m, [id]: z.current})) }
 
   return (
-    <div className="desktop" role="application" aria-label="AetherOS Desktop" style={{backgroundImage:`url(${settings.wallpaper})`}}>
-      <div className="desktop-icons">
-        <div className="desktop-icon" onDoubleClick={()=>openApp('browser')}>🌐<span>Browser</span></div>
-        <div className="desktop-icon" onDoubleClick={()=>openApp('files')}>🗂️<span>Files</span></div>
-        <div className="desktop-icon" onDoubleClick={()=>openApp('terminal')}>🖥️<span>Terminal</span></div>
-        <div className="desktop-icon" onDoubleClick={()=>openApp('music')}>🎵<span>Music</span></div>
-        <div className="desktop-icon" onDoubleClick={()=>openApp('settings')}>⚙️<span>Settings</span></div>
+    <div className="desktop" role="application" aria-label="AetherOS Desktop">
+      <div className="desktop-icons" aria-hidden>
+        <div className="desktop-icon" onDoubleClick={()=>openApp('browser')} title="Browser">🌐<span>Browser</span></div>
+        <div className="desktop-icon" onDoubleClick={()=>openApp('files')} title="Files">🗂️<span>Files</span></div>
+        <div className="desktop-icon" onDoubleClick={()=>openApp('terminal')} title="Terminal">⌨️<span>Terminal</span></div>
+        <div className="desktop-icon" onDoubleClick={()=>openApp('settings')} title="Settings">⚙️<span>Settings</span></div>
       </div>
+
+      <Dock openApps={open} onOpen={openApp} zmap={zmap} />
 
       {open.includes('browser') && (
         <Window id="browser" title="Aether Browser" z={zmap['browser']||1} onFocus={()=>bringToFront('browser')} onClose={()=>closeApp('browser')}>
@@ -65,19 +53,11 @@ export default function Desktop(){
         </Window>
       )}
 
-      {open.includes('music') && (
-        <Window id="music" title="Music" z={zmap['music']||1} onFocus={()=>bringToFront('music')} onClose={()=>closeApp('music')}>
-          <MusicApp />
-        </Window>
-      )}
-
       {open.includes('settings') && (
         <Window id="settings" title="Settings" z={zmap['settings']||1} onFocus={()=>bringToFront('settings')} onClose={()=>closeApp('settings')}>
-          <SettingsApp settings={settings} setTheme={setTheme} setWallpaper={setWallpaper} />
+          <SettingsApp />
         </Window>
       )}
-
-      <Taskbar openApps={open} onOpen={openApp}/>
     </div>
   )
 }

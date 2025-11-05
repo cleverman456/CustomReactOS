@@ -1,37 +1,48 @@
+/* macOS Sonoma inspired basic styles for AetherOS */
 :root{
-  --bg:#071023;
+  --bg-start:#061126;
+  --bg-end:#07283a;
   --glass: rgba(255,255,255,0.06);
-  --accent: #06b6d4;
-  --muted: rgba(255,255,255,0.6);
+  --glass-2: rgba(255,255,255,0.03);
+  --accent: linear-gradient(90deg,#7c3aed,#06b6d4);
+  --muted: rgba(255,255,255,0.7);
+  --radius: 12px;
 }
 *{box-sizing:border-box}
-html,body,#root{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui;touch-action:none}
-.boot-screen{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#071023,#08314a);color:white}
-.boot-card{width:420px;padding:28px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));text-align:center;box-shadow:0 12px 40px rgba(2,6,23,0.6)}
-.boot-logo{width:72px;height:72px;margin-bottom:8px;opacity:0.95}
+html,body,#root{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";-webkit-font-smoothing:antialiased}
+.boot-screen{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--bg-start),var(--bg-end));color:white}
+.boot-card{width:420px;padding:28px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));text-align:center;box-shadow:0 20px 60px rgba(2,6,23,0.6)}
+.boot-logo{width:72px;height:72px;margin-bottom:8px;opacity:0.95;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.5))}
 .boot-card h1{margin:6px 0 14px;font-weight:600;letter-spacing:0.6px}
-.boot-bar{height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;margin:12px auto 6px}
-.boot-progress{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7c3aed);animation:boot 2.4s ease forwards}
+.boot-bar{height:10px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden;margin:12px auto 6px}
+.boot-progress{height:100%;width:0%;background:linear-gradient(90deg,#7c3aed,#06b6d4);animation:boot 1.6s ease forwards}
 @keyframes boot{to{width:100%}}
 .boot-sub{font-size:13px;color:var(--muted)}
 
-.desktop{width:100vw;height:100vh;background-image:url('/wallpaper.svg');background-size:cover;background-position:center;position:relative;overflow:hidden}
-.desktop-icons{position:absolute;left:16px;top:18px;display:flex;flex-direction:column;gap:14px}
-.desktop-icon{width:72px;text-align:center;cursor:pointer;user-select:none;padding:8px;border-radius:8px;background:var(--glass);backdrop-filter: blur(6px);box-shadow:0 6px 18px rgba(2,6,23,0.35)}
-.desktop-icon span{display:block;font-size:12px;margin-top:8px;color:var(--muted)}
+.desktop{width:100vw;height:100vh;position:relative;overflow:hidden;background:radial-gradient(1200px 800px at 10% 20%, rgba(124,58,237,0.12), transparent), radial-gradient(900px 600px at 90% 80%, rgba(6,182,212,0.09), transparent), linear-gradient(180deg,var(--bg-start),var(--bg-end));padding:24px}
+.desktop-icons{position:absolute;left:24px;top:24px;display:flex;flex-direction:column;gap:14px;z-index:2}
+.desktop-icon{width:76px;text-align:center;cursor:pointer;user-select:none;padding:10px;border-radius:12px;background:var(--glass);backdrop-filter: blur(10px) saturate(120%);box-shadow:0 12px 30px rgba(2,6,23,0.5);transition:transform .12s ease}
+.desktop-icon:active{transform:scale(.98)}
+.desktop-icon span{display:block;font-size:12px;margin-top:8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.taskbar{position:absolute;bottom:12px;left:12px;right:12px;height:48px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(2,6,23,0.5)}
-.start-btn{font-size:18px;padding:6px 10px;border-radius:8px;border:none;background:transparent;cursor:pointer}
-.taskbar-center{flex:1;display:flex;gap:8px;align-items:center}
-.taskbar-item{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:13px;color:var(--muted)}
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;height:76px;padding:8px 14px;border-radius:28px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));backdrop-filter: blur(16px) saturate(120%);display:flex;align-items:center;gap:12px;box-shadow:0 18px 60px rgba(2,6,23,0.6);z-index:40}
+.dock-btn{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:transparent;border:none}
+.dock-btn.active{box-shadow:0 6px 18px rgba(124,58,237,0.18);transform:translateY(-6px) scale(1.06)}
 
-.window{position:absolute;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 18px 48px rgba(2,6,23,0.6);overflow:hidden;display:flex;flex-direction:column}
-.window-header{height:38px;display:flex;align-items:center;justify-content:space-between;padding:6px 10px;cursor:grab;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.02)}
+.task-clock{color:var(--muted);font-size:13px;margin-left:8px}
+
+.window{position:absolute;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));box-shadow:0 40px 90px rgba(3,7,18,0.7);overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,0.03)}
+.window-header{height:44px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;cursor:grab;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-bottom:1px solid rgba(255,255,255,0.02)}
 .window-title{font-weight:600}
-.window-controls button{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px}
-.window-body{flex:1;padding:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005))}
+.window-controls{display:flex;gap:6px;align-items:center}
+.control {width:12px;height:12px;border-radius:50%;display:inline-block}
+.control.close{background:#ff5f57}
+.control.min{background:#ffbd2e}
+.control.max{background:#28c840}
 
-.resize-handle{position:absolute;width:12px;height:12px;background:transparent}
+.window-body{flex:1;padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent)}
+
+.resize-handle{position:absolute;width:12px;height:12px;background:transparent;touch-action:none}
 .resize-handle.n{top:-6px;left:50%;transform:translateX(-50%)}
 .resize-handle.s{bottom:-6px;left:50%;transform:translateX(-50%)}
 .resize-handle.e{right:-6px;top:50%;transform:translateY(-50%)}
@@ -41,9 +52,20 @@ html,body,#root{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui;touch-
 .resize-handle.se{right:-6px;bottom:-6px}
 .resize-handle.sw{left:-6px;bottom:-6px}
 
-/* browser app */
+/* apps */
 .browser-app{display:flex;flex-direction:column;height:100%}
 .nav{display:flex;gap:8px;padding-bottom:8px}
-.nav-input{flex:1;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.04);color:white}
-.frame-wrap{flex:1;border-radius:8px;overflow:hidden}
+.nav-input{flex:1;padding:8px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:white}
+.frame-wrap{flex:1;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
 iframe{width:100%;height:100%;border:0;background:white}
+
+/* files */
+.files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.file-card{padding:12px;border-radius:10px;background:var(--glass-2);backdrop-filter:blur(8px);min-height:80px}
+
+/* terminal */
+.terminal-screen{background:#04101a;padding:12px;border-radius:8px;color:#cfeff6;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;overflow:auto;height:100%}
+.terminal-input{margin-top:8px;display:flex;gap:8px}
+
+/* settings small */
+.settings-row{display:flex;align-items:center;gap:8px;margin-top:8px}

@@ -7,7 +7,7 @@ export default function Boot(){
         <img src="/logo.svg" alt="logo" className="boot-logo"/>
         <h1>AetherOS</h1>
         <div className="boot-bar"><div className="boot-progress"/></div>
-        <p className="boot-sub">Initializing... </p>
+        <p className="boot-sub">Starting up macOS Sonoma — inspired UI</p>
       </div>
     </div>
   )
